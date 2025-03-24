@@ -7,7 +7,7 @@ function NoteForm({ setNotes }) {
     const addNote = async (e) => {
         e.preventDefault();
         const newNote = { title, content };
-        const response = await fetch('${BASE_URL}/notes', {
+        const response = await fetch(`${BASE_URL}/notes`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(newNote)
