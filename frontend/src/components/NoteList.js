@@ -1,4 +1,5 @@
 import React from "react";
+import { BASE_URL } from "../utils";
 
 function NoteList({ notes, setNotes }) {
     const deleteNote = async (id) => {
