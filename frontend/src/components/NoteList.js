@@ -2,7 +2,7 @@ import React from "react";
 
 function NoteList({ notes, setNotes }) {
     const deleteNote = async (id) => {
-        await fetch(`http://localhost:5000/notes/${id}`, { method: "DELETE" });
+        await fetch(`${BASE_URL}/notes/${id}`, { method: "DELETE" });
         setNotes(notes.filter(note => note.id !== id));
     };
 
