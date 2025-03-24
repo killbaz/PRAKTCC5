@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import NoteList from "../components/NoteList";
 import NoteForm from "../components/NoteForm";
+import {BASE_URL} from "../utils"
 
 function Home() {
     const [notes, setNotes] = useState([]);
