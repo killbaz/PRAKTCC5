@@ -7,7 +7,7 @@ function Home() {
     const [notes, setNotes] = useState([]);
 
     useEffect(() => {
-        fetch('${BASE_URL}/notes')
+        fetch(`${BASE_URL}/notes`)
             .then(response => response.json())
             .then(data => setNotes(data));
     }, []);
