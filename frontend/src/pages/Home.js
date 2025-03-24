@@ -6,7 +6,7 @@ function Home() {
     const [notes, setNotes] = useState([]);
 
     useEffect(() => {
-        fetch("http://localhost:5000/notes")
+        fetch('${BASE_URL}/notes')
             .then(response => response.json())
             .then(data => setNotes(data));
     }, []);
