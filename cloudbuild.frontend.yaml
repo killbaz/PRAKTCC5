@@ -3,7 +3,7 @@ steps:
   - name: "node:18"
     dir: "frontend"
     entrypoint: "npm"
-    args: ["install","gcloud", "app", "deploy", "app.yaml"]
+    args: ["install"]
 
   # Step 2: Build React App (dengan chmod)
   - name: "node:18"
