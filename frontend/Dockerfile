@@ -1,4 +1,4 @@
-FROM node:18-alpine
+FROM node:20-alpine
 WORKDIR /frontend/
 COPY public/ /frontend/public
 COPY src/ /frontend/src
