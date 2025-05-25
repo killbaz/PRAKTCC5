@@ -1,31 +1,82 @@
-import React, { useState } from "react";
-import { BASE_URL } from "../utils";
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { FaSignOutAlt } from "react-icons/fa";
 
-function NoteForm({ setNotes }) {
-    const [title, setTitle] = useState("");
-    const [content, setContent] = useState("");
+const NoteForm = ({
+  selectedNote,
+  title,
+  setTitle,
+  description,
+  setDescription,
+  createNote,
+  updateNote,
+  deleteNote,
+}) => {
+  const navigate = useNavigate();
 
-    const addNote = async (e) => {
-        e.preventDefault();
-        const newNote = { title, content };
-        const response = await fetch(`${BASE_URL}/notes`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(newNote)
-        });
-        const data = await response.json();
-        setNotes(prevNotes => [...prevNotes, data]);
-        setTitle("");
-        setContent("");
-    };
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
 
-    return (
-        <form className="note-form" onSubmit={addNote}>
-            <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title" required />
-            <textarea value={content} onChange={(e) => setContent(e.target.value)} placeholder="Content" required />
-            <button type="submit" className="add-btn">Add Note</button>
-        </form>
-    );
-}
+  return (
+    <div className="note-details" style={{ position: "relative" }}>
+      {/* Tombol Logout di kanan atas */}
+      <div style={{ position: "absolute", top: "10px", right: "10px" }}>
+        <button
+          onClick={handleLogout}
+          className="logout-link"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "6px",
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            color: "#007bff",
+          }}
+        >
+          <FaSignOutAlt /> Logout
+        </button>
+      </div>
+
+      <form onSubmit={selectedNote ? updateNote : createNote}>
+        <div className="form-group">
+          <label>Title</label>
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="input-field"
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Description</label>
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className="input-field"
+            required
+          />
+        </div>
+
+        <button type="submit" className="save-button">
+          {selectedNote ? "Update Note" : "Add Note"}
+        </button>
+        {selectedNote && (
+          <button
+            type="button"
+            className="delete-button"
+            onClick={() => deleteNote(selectedNote.id)}
+          >
+            Delete
+          </button>
+        )}
+      </form>
+    </div>
+  );
+};
 
 export default NoteForm;
