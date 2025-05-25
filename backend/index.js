@@ -1,24 +1,40 @@
 import express from "express";
 import cors from "cors";
-import notesRoutes from "./routes/NoteRoutes.js";
+import cookieParser from "cookie-parser";
+import NoteRoute from "./routes/NoteRoutes.js";
+import UserRoute from "./routes/UserRoutes.js";
 import db from "./config/database.js";
+import dotenv from "dotenv";
 
+dotenv.config();
 const app = express();
+const PORT = process.env.PORT || 5000;
 
 // Middleware
-app.use(cors());
+app.use(cookieParser());
 app.use(express.json());
 
+
+const allowedOrigins = [
+  "https://frontend-amri-dot-c-12-451814.uc.r.appspot.com/",
+];
+
+app.use(
+  cors({
+    origin: allowedOrigins,
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
 // Routes
-app.use("/notes", notesRoutes);
+app.use(NoteRoute);
+app.use(UserRoute);
 
-// Test Database Connection
-try {
-    await db.authenticate();
-    console.log("Database connected...");
-} catch (error) {
-    console.error("Database connection failed: ", error);
-}
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "ok", message: "Server is running" });
+});
+
+app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
