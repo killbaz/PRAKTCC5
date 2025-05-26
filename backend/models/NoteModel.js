@@ -15,3 +15,7 @@ const Note = db.define("notes", {
 });
 
 export default Note;
+
+(async () => {
+  await db.sync();
+})();
