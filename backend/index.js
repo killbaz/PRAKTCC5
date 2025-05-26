@@ -1,64 +1,38 @@
 import express from "express";
 import cors from "cors";
-import cookieParser from "cookie-parser";
-import dotenv from "dotenv";
-import NoteRoute from "./routes/NoteRoutes.js";
-import UserRoute from "./routes/UserRoutes.js";
+import path from "path";
+import { fileURLToPath } from "url";
+import router from "./routes/route.js";
+import db from "./config/database.js";
 
-dotenv.config();
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = 5000;
 
-// ✅ Allowed CORS origins (bisa ditambah sesuai frontend)
-const allowedOrigins = [
-  "https://frontend-amri-dot-c-12-451814.uc.r.appspot.com",
-];
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
+// Middleware
 app.use(cors({
-  origin: allowedOrigins,
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
+  origin: 'https://frontend-amri-dot-c-12-451814.uc.r.appspot.com',
+  credentials: true
 }));
+app.use(express.json());
+app.use(router);
+app.use(express.static(path.join(__dirname, "../frontend"))); 
 
-app.use(cookieParser());
-app.use(express.json({ limit: "10mb" }));
-app.use(express.urlencoded({ extended: true }));
+// Cek koneksi database
+(async () => {
+    try {
+        await db.authenticate();
+        console.log("Database connected");
+    } catch (error) {
+        console.error("Database connection failed:", error);
+    }
+})();
 
-// Logging sederhana
-app.use((req, res, next) => {
-  console.log(`[${req.method}] ${req.url}`);
-  next();
+// Default route
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "../frontend", "index.css"));
 });
 
-// ✅ Routing
-app.use(NoteRoute);
-app.use(UserRoute);
-
-// ✅ Health check endpoint
-app.get("/health", (req, res) => {
-  res.status(200).json({ status: "ok", message: "Server is running" });
-});
-
-// ✅ 404 Not Found Handler
-app.use("*", (req, res) => {
-  res.status(404).json({
-    message: "Route not found",
-    method: req.method,
-    path: req.originalUrl
-  });
-});
-
-// ✅ Global Error Handler
-app.use((err, req, res, next) => {
-  console.error("Unhandled Error:", err);
-  res.status(500).json({
-    message: "Internal Server Error",
-    error: process.env.NODE_ENV === "development" ? err.message : undefined,
-  });
-});
-
-// ✅ Start Server
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
-});
+app.listen(PORT, () => console.log(`Server started on http://localhost:${PORT}`));
