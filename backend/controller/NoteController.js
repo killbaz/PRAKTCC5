@@ -52,5 +52,3 @@ export const deleteNote = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
-
-export { getNotes, createNote, updateNote, deleteNote, getNoteById };
