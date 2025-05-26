@@ -12,11 +12,14 @@ import { verifyToken } from "../middleware/verifyToken.js";
 
 const router = express.Router();
 
-router.get("/users", getUsers);
-router.get("/users/:id", getUserById);
+// User Management
+router.get("/users", verifyToken, getUsers);          // ← tambahkan proteksi (opsional)
+router.get("/users/:id", verifyToken, getUserById);   // ← tambahkan proteksi (opsional)
 router.post("/create-users", createUser);
-router.put("/update-users/:id", updateUser);
-router.delete("/delete-users/:id", deleteUser);
+router.put("/update-users/:id", verifyToken, updateUser);   // ← proteksi user update
+router.delete("/delete-users/:id", verifyToken, deleteUser); // ← proteksi user delete
+
+// Auth
 router.post("/login", loginHandler);
 router.post("/logout", verifyToken, logout);
 
