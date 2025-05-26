@@ -10,7 +10,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 const allowedOrigins = [
-  "https://frontend-amri-dot-c-12-451814.uc.r.appspot.com/",
+  "https://frontend-amri-dot-c-12-451814.uc.r.appspot.com",
 ];
 
 app.use(
