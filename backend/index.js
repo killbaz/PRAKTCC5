@@ -3,17 +3,11 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import NoteRoute from "./routes/NoteRoutes.js";
 import UserRoute from "./routes/UserRoutes.js";
-import db from "./config/database.js";
 import dotenv from "dotenv";
 
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
-
-// Middleware
-app.use(cookieParser());
-app.use(express.json());
-
 
 const allowedOrigins = [
   "https://frontend-amri-dot-c-12-451814.uc.r.appspot.com/",
@@ -27,6 +21,10 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+
+// Middleware
+app.use(cookieParser());
+app.use(express.json());
 
 // Routes
 app.use(NoteRoute);
