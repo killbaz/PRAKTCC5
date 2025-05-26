@@ -14,6 +14,7 @@ const PORT = process.env.PORT || 8080;
 // ✅ CORS configuration
 const allowedOrigins = [
   "https://frontend-amri-dot-c-12-451814.uc.r.appspot.com",
+  "http://localhost:5000", // untuk pengembangan lokal
 ];
 
 app.use(cors({
